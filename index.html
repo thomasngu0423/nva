@@ -46,7 +46,7 @@
 </div>
 </div>
 </div>
-<form method="POST" action="process_form.php" id="contactForm" name="contactForm" class="contactForm" novalidate="novalidate">
+<form id="contactForm" name="contactForm" class="contactForm" novalidate="novalidate">
 <div class="row">
 <div class="col-md-12">
 <div class="form-group">
@@ -75,7 +75,7 @@
 </div>
 <div class="col-md-12">
 <div class="form-group">
-<button type="submit" class="btn btn-primary">发送消息</button>
+<button type="button" id="submitForm" class="btn btn-primary">发送消息</button>
 <div class="submitting"></div>
 </div>
 </div>
@@ -106,5 +106,32 @@
 <script src="mypage_files/bootstrap.min.js"></script>
 <script src="mypage_files/jquery.validate.min.js"></script>
 <script src="mypage_files/main.js"></script>
+<script>
+document.getElementById('submitForm').addEventListener('click', function(event) {
+    event.preventDefault(); // 阻止表单默认提交行为
+
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var subject = document.getElementById('subject').value;
+    var message = document.getElementById('message').value;
+
+    // 使用EmailJS发送邮件
+    emailjs.send("service_gmaiyho", "template_b5f8a8u", {
+        to_name: "Your Name",
+        from_name: name,
+        from_email: email,
+        message: message
+    }).then(function(response) {
+        console.log('邮件发送成功:', response.status, response.text);
+        document.getElementById('form-message-success').style.display = 'block';
+        document.getElementById('form-message-success').innerHTML = '您的消息已发送，谢谢！';
+    }, function(error) {
+        console.error('邮件发送失败:', error);
+        document.getElementById('form-message-warning').style.display = 'block';
+        document.getElementById('form-message-warning').innerHTML = '发送消息时出错，请稍后重试。';
+    });
+});
+
+</script>
 </body>
 </html>
